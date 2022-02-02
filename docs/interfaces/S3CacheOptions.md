@@ -1,4 +1,4 @@
-[fluent-iterable - v0.0.2](../README.md) / S3CacheOptions
+[fluent-iterable - v0.0.3](../README.md) / S3CacheOptions
 
 # Interface: S3CacheOptions
 
