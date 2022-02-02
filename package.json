@@ -1,8 +1,7 @@
 {
-  "name": "boilerplate-base",
-  "description": "This project is just a template for creation of new projects",
+  "name": "remembered-s3-alternative-persistence",
+  "description": "S3 alternative persistence implementation for remembered redis",
   "version": "0.0.0",
-  "private": true,
   "author": {
     "name": "Thiago O Santos <tos.oliveira@gmail.com>"
   },
@@ -65,30 +64,34 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/codibre/boilerplate-base.git"
+    "url": "https://github.com/codibre/remembered-s3-alternative-persistence.git"
   },
-  "homepage": "https://github.com/codibre/boilerplate-base#readme",
+  "homepage": "https://github.com/codibre/remembered-s3-alternative-persistence#readme",
   "bugs": {
-    "url": "https://github.com/codibre/boilerplate-base/issues"
+    "url": "https://github.com/codibre/remembered-s3-alternative-persistence/issues"
   },
   "keywords": [],
   "license": "MIT",
   "devDependencies": {
     "@codibre/confs": "1.1.0",
+    "@remembered/redis": "^0.7.12",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/npm": "^9.0.0",
     "@semantic-release/release-notes-generator": "^10.0.3",
+    "@types/ioredis": "^4.28.7",
     "@types/jest": "^27.4.0",
     "@types/semantic-release": "^17.2.3",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
+    "aws-sdk": "^2.1066.0",
     "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "husky": "^7.0.4",
+    "ioredis": "^4.28.3",
     "jest": "^27.4.7",
     "jest-callslike": "^0.2.0",
     "jest-extended": "^1.2.0",
@@ -100,5 +103,8 @@
     "typedoc": "^0.22.11",
     "typedoc-plugin-markdown": "^3.11.12",
     "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "typed-emitter": "^2.1.0"
   }
 }
