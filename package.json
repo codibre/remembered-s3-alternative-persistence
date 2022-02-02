@@ -1,5 +1,5 @@
 {
-  "name": "remembered-s3-alternative-persistence",
+  "name": "@remembered/s3-alternative-persistence",
   "description": "S3 alternative persistence implementation for remembered redis",
   "version": "0.0.2",
   "author": {
