@@ -39,6 +39,8 @@ const remembered = new RememberedRedis(
 **maxSavingDelay** is meant to indicate to RememberedRedis how much it need to wait until the cache is save. The longer it waits, more values are inserted in the same S3 file, saving some requests, but bigger is the file and the memory consumption to deal with it, so measure that one carefully for your need.
 **transientTll** defines the maximum ttl to keep the same file content on redis. This is useful if you have some spare memory on your redis instance and wants to use it to make less GET requests on S3, saving some money with it. Also measure that for your need, and if you want to avoid using it at all, don't inform a redis instance, don't inform this property or inform it as 0.
 
+You can also listen for error events: saveError and fetchingError. This will be emitted when either the communication with redis or S3 fails
+
 ## License
 
 Licensed under [MIT](https://en.wikipedia.org/wiki/MIT_License).

@@ -8,5 +8,4 @@ export interface S3CacheSaveEventMetadata {
 export type S3CacheEvents = {
 	saveError: (message: string, meta: S3CacheSaveEventMetadata) => void;
 	fetchingError: (message: string, meta: S3CacheSaveEventMetadata) => void;
-	message: (body: string, from: string) => void;
 };

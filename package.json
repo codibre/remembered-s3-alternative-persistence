@@ -1,7 +1,7 @@
 {
   "name": "remembered-s3-alternative-persistence",
   "description": "S3 alternative persistence implementation for remembered redis",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": {
     "name": "Thiago O Santos <tos.oliveira@gmail.com>"
   },
