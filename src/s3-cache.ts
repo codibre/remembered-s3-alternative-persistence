@@ -76,14 +76,10 @@ export class S3Cache
 			}
 		} catch (err) {
 			const error = err as AWSError;
-			this.emit(
-				'fetchingError',
-				'error while fetching from redis',
-				{
-					persistenceType: 'redis',
-					errorMessage: error.message,
-				},
-			);
+			this.emit('fetchingError', 'error while fetching from redis', {
+				persistenceType: 'redis',
+				errorMessage: error.message,
+			});
 		}
 
 		try {
