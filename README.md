@@ -11,7 +11,7 @@ S3 alternative persistence implementation for remembered redis
 ## How to Install
 
 ```
-npm i remembered-s3-alternative-persistence
+npm i @remembered/s3-alternative-persistence
 ```
 
 ## How to use
