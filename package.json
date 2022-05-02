@@ -73,7 +73,8 @@
   "keywords": [],
   "license": "MIT",
   "peerDependencies": {
-    "@remembered/redis": "*"
+    "@remembered/redis": "*",
+    "ioredis": "*"
   },
   "devDependencies": {
     "@codibre/confs": "1.1.0",
@@ -95,7 +96,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "husky": "^7.0.4",
-    "ioredis": "^4.28.3",
+    "ioredis": "*",
     "jest": "^27.4.7",
     "jest-callslike": "^0.2.0",
     "jest-extended": "^1.2.0",
