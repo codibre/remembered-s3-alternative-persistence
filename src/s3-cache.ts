@@ -28,6 +28,10 @@ export class S3Cache
 		return this.options.maxSavingDelay;
 	}
 
+	get maxResultsPerSave() {
+		return this.options.maxResultsPerSave;
+	}
+
 	private async _getFromRedis(
 		key: string,
 	): Promise<string | Buffer | undefined> {

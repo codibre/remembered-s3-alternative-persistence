@@ -72,9 +72,12 @@
   },
   "keywords": [],
   "license": "MIT",
+  "peerDependencies": {
+    "@remembered/redis": "*"
+  },
   "devDependencies": {
     "@codibre/confs": "1.1.0",
-    "@remembered/redis": "^0.7.12",
+    "@remembered/redis": "^1.1.0",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/git": "^10.0.1",
@@ -86,6 +89,7 @@
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
     "aws-sdk": "^2.1066.0",
+    "del-cli": "^3.0.1",
     "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
