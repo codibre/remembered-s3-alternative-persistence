@@ -34,7 +34,7 @@ export class S3Cache
 
 	private async _getFromRedis(
 		key: string,
-	): Promise<string | Buffer | undefined> {
+	): Promise<string | Buffer | null | undefined> {
 		return this.redis?.getBuffer(key);
 	}
 
