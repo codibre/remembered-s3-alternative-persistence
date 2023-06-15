@@ -1,6 +1,6 @@
 import { S3CacheOptions } from './s3-cache-options';
 import { AlternativePersistence } from '@remembered/redis';
-import { S3 } from 'aws-sdk';
+import { S3 } from '@aws-sdk/client-s3';
 import { Redis } from 'ioredis';
 import { EventEmitter } from 'events';
 import TypedEmitter from 'typed-emitter';
@@ -32,15 +32,26 @@ export class S3Cache
 		return this.options.maxResultsPerSave;
 	}
 
+	set maxResultsPerSave(value) {
+		this.options.maxResultsPerSave = value;
+	}
+
 	private async _getFromRedis(
 		key: string,
 	): Promise<string | Buffer | null | undefined> {
 		return this.redis?.getBuffer(key);
 	}
 
-	private async _saveOnRedis(key: string, content: string | Buffer) {
+	private async _saveOnRedis(
+		key: string,
+		content: Uint8Array | string | Buffer,
+	) {
 		if (this.options.transientTtl) {
-			await this.redis?.setex(key, this.options.transientTtl, content);
+			await this.redis?.setex(
+				key,
+				this.options.transientTtl,
+				Buffer.from(content),
+			);
 		}
 	}
 
@@ -56,7 +67,7 @@ export class S3Cache
 
 		const results = await Promise.allSettled([
 			this._saveOnRedis(this._getRedisKey(objectKey), content),
-			this.s3.putObject(params).promise(),
+			this.s3.putObject(params),
 		]);
 
 		results.forEach((x, index) => {
@@ -92,9 +103,9 @@ export class S3Cache
 				Key: s3Key,
 			};
 
-			const { Body } = await this.s3.getObject(params).promise();
+			const { Body } = await this.s3.getObject(params);
 			if (Body) {
-				this._saveOnRedis(redisKey, Body as string | Buffer);
+				this._saveOnRedis(redisKey, await Body.transformToByteArray());
 			}
 
 			return Body as string | Buffer | undefined;
