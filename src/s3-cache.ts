@@ -42,16 +42,9 @@ export class S3Cache
 		return this.redis?.getBuffer(key);
 	}
 
-	private async _saveOnRedis(
-		key: string,
-		content: Uint8Array | string | Buffer,
-	) {
+	private async _saveOnRedis(key: string, content: string | Buffer) {
 		if (this.options.transientTtl) {
-			await this.redis?.setex(
-				key,
-				this.options.transientTtl,
-				Buffer.from(content),
-			);
+			await this.redis?.setex(key, this.options.transientTtl, content);
 		}
 	}
 
@@ -105,10 +98,11 @@ export class S3Cache
 
 			const { Body } = await this.s3.getObject(params);
 			if (Body) {
-				this._saveOnRedis(redisKey, await Body.transformToByteArray());
+				const result = Buffer.from(await Body.transformToByteArray());
+				this._saveOnRedis(redisKey, result);
 			}
 
-			return Body as string | Buffer | undefined;
+			return undefined;
 		} catch (err) {
 			const error = err as AWSError;
 			this.emit('fetchingError', 'error while fetching from S3', {
