@@ -99,7 +99,10 @@ export class S3Cache
 			const { Body } = await this.s3.getObject(params);
 			if (Body) {
 				const result = Buffer.from(await Body.transformToByteArray());
-				this._saveOnRedis(redisKey, result);
+				if (result.length) {
+					this._saveOnRedis(redisKey, result);
+					return result;
+				}
 			}
 
 			return undefined;
