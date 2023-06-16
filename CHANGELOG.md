@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.0.1...v1.0.2) (2023-06-16)
+
+
+### Bug Fixes
+
+* return buffer from s3 ([51a86da](https://github.com/codibre/remembered-s3-alternative-persistence/commit/51a86da260c36901af406d5eecfc163edda2ef50))
+
 ## [1.0.1](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.0.0...v1.0.1) (2023-06-16)
 
 
