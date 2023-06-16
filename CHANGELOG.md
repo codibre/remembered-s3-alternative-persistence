@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.0.0...v1.0.1) (2023-06-16)
+
+
+### Bug Fixes
+
+* fixing cache fetching from s3 ([c7e3bed](https://github.com/codibre/remembered-s3-alternative-persistence/commit/c7e3bedf0df5f8747bbcaab90afe7327a94c7353))
+
 # [1.0.0](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v0.0.3...v1.0.0) (2023-06-15)
 
 
