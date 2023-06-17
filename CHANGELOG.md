@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.0.2...v1.1.0) (2023-06-17)
+
+
+### Features
+
+* adding success events ([9a85290](https://github.com/codibre/remembered-s3-alternative-persistence/commit/9a85290e9177fe1e0d49fffb990eeb476f508e65))
+
 ## [1.0.2](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.0.1...v1.0.2) (2023-06-16)
 
 
