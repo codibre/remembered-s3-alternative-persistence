@@ -1,6 +1,6 @@
 import { S3CacheOptions } from './s3-cache-options';
 import { AlternativePersistence } from '@remembered/redis';
-import { S3 } from '@aws-sdk/client-s3';
+import { PutObjectCommandInput, S3 } from '@aws-sdk/client-s3';
 import { Redis } from 'ioredis';
 import { EventEmitter } from 'events';
 import TypedEmitter from 'typed-emitter';
@@ -48,6 +48,7 @@ export class S3Cache
 	private async _saveOnRedis(key: string, content: string | Buffer) {
 		if (this.options.transientTtl) {
 			await this.redis?.setex(key, this.options.transientTtl, content);
+			return true;
 		}
 	}
 
@@ -65,31 +66,38 @@ export class S3Cache
 		const redisKey = this._getRedisKey(objectKey);
 		const results = await Promise.allSettled([
 			this._saveOnRedis(redisKey, content),
-			this.s3.putObject(params),
+			this._saveOnS3(params),
 		]);
 
 		results.forEach((x, index) => {
-			const persistenceType = persistanceTypes[index];
-			const meta: S3CacheSuccessSaveEventMetadata = {
-				persistenceType,
-				key:
-					persistenceType === 's3'
-						? this.getLogKey(bucketName, objectKey)
-						: redisKey,
-			};
-			if (x.status === 'rejected') {
-				this.emit(
-					'saveError',
-					'Error while persisting cache',
-					Object.assign(meta, {
-						errorMessage: x.reason.message,
-						syscall: (x.reason as AWSError).syscall,
-					}),
-				);
-			} else {
-				this.emit('saveSuccess', 'Cache persisted', meta);
+			if (x.status === 'rejected' || x.value) {
+				const persistenceType = persistanceTypes[index];
+				const meta: S3CacheSuccessSaveEventMetadata = {
+					persistenceType,
+					key:
+						persistenceType === 's3'
+							? this.getLogKey(bucketName, objectKey)
+							: redisKey,
+				};
+				if (x.status === 'rejected') {
+					this.emit(
+						'saveError',
+						'Error while persisting cache',
+						Object.assign(meta, {
+							errorMessage: x.reason.message,
+							syscall: (x.reason as AWSError).syscall,
+						}),
+					);
+				} else {
+					this.emit('saveSuccess', 'Cache persisted', meta);
+				}
 			}
 		});
+	}
+
+	private async _saveOnS3(params: PutObjectCommandInput) {
+		await this.s3.putObject(params);
+		return true;
 	}
 
 	private getLogKey(bucketName: string, objectKey: string): string {
