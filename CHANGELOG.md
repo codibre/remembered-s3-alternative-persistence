@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.1.2...v1.1.3) (2023-06-17)
+
+
+### Bug Fixes
+
+* implementing firstCheck support ([92d613e](https://github.com/codibre/remembered-s3-alternative-persistence/commit/92d613ed05c0503b5cf4a3e09e5d12d4acbeec39))
+
 ## [1.1.2](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.1.1...v1.1.2) (2023-06-17)
 
 
