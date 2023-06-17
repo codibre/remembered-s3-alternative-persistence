@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.1.1...v1.1.2) (2023-06-17)
+
+
+### Bug Fixes
+
+* fixing persistenceType for s3 fetching success ([38e7a4c](https://github.com/codibre/remembered-s3-alternative-persistence/commit/38e7a4c2bf95a59beefbfc7c5952df7375769f14))
+
 ## [1.1.1](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.1.0...v1.1.1) (2023-06-17)
 
 
