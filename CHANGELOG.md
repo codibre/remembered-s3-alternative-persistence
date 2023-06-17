@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.1.0...v1.1.1) (2023-06-17)
+
+
+### Bug Fixes
+
+* emitting saving event only when persisted ([d28c9c8](https://github.com/codibre/remembered-s3-alternative-persistence/commit/d28c9c87f687a27fc112cce683a06ed358df6510))
+
 # [1.1.0](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.0.2...v1.1.0) (2023-06-17)
 
 
