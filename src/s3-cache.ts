@@ -130,7 +130,7 @@ export class S3Cache
 
 		const { bucketName } = this.options;
 		const metaS3: S3CacheSuccessSaveEventMetadata = {
-			persistenceType: 'redis',
+			persistenceType: 's3',
 			key: this.getLogKey(bucketName, s3Key),
 		};
 
