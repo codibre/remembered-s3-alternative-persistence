@@ -4,7 +4,10 @@ import { S3 } from '@aws-sdk/client-s3';
 import { Redis } from 'ioredis';
 import { EventEmitter } from 'events';
 import TypedEmitter from 'typed-emitter';
-import { S3CacheEvents } from './s3-cache-events';
+import {
+	S3CacheEvents,
+	S3CacheSuccessSaveEventMetadata,
+} from './s3-cache-events';
 
 interface AWSError {
 	message: string;
@@ -50,6 +53,7 @@ export class S3Cache
 
 	async save(key: string, content: string | Buffer): Promise<void> {
 		const objectKey = this._getObjectKey(key);
+		const { bucketName } = this.options;
 
 		const params = {
 			Body: content,
@@ -58,37 +62,69 @@ export class S3Cache
 			ContentType: 'application/json',
 		};
 
+		const redisKey = this._getRedisKey(objectKey);
 		const results = await Promise.allSettled([
-			this._saveOnRedis(this._getRedisKey(objectKey), content),
+			this._saveOnRedis(redisKey, content),
 			this.s3.putObject(params),
 		]);
 
 		results.forEach((x, index) => {
+			const persistenceType = persistanceTypes[index];
+			const meta: S3CacheSuccessSaveEventMetadata = {
+				persistenceType,
+				key:
+					persistenceType === 's3'
+						? this.getLogKey(bucketName, objectKey)
+						: redisKey,
+			};
 			if (x.status === 'rejected') {
-				this.emit('saveError', 'Error while persisting cache', {
-					persistenceType: persistanceTypes[index],
-					errorMessage: x.reason.message,
-					syscall: (x.reason as AWSError).syscall,
-				});
+				this.emit(
+					'saveError',
+					'Error while persisting cache',
+					Object.assign(meta, {
+						errorMessage: x.reason.message,
+						syscall: (x.reason as AWSError).syscall,
+					}),
+				);
+			} else {
+				this.emit('saveSuccess', 'Cache persisted', meta);
 			}
 		});
+	}
+
+	private getLogKey(bucketName: string, objectKey: string): string {
+		return `${bucketName}/${objectKey}`;
 	}
 
 	async get(key: string): Promise<string | Buffer | undefined> {
 		const s3Key = this._getObjectKey(key);
 		const redisKey = this._getRedisKey(s3Key);
+		const metaRedis: S3CacheSuccessSaveEventMetadata = {
+			persistenceType: 'redis',
+			key: redisKey,
+		};
 		try {
 			const redisResult = await this._getFromRedis(redisKey);
 			if (redisResult) {
+				this.emit('fetchingSuccess', 'Cache retrieved', metaRedis);
 				return redisResult;
 			}
 		} catch (err) {
 			const error = err as AWSError;
-			this.emit('fetchingError', 'error while fetching from redis', {
-				persistenceType: 'redis',
-				errorMessage: error.message,
-			});
+			this.emit(
+				'fetchingError',
+				'error while fetching from redis',
+				Object.assign(metaRedis, {
+					errorMessage: error.message,
+				}),
+			);
 		}
+
+		const { bucketName } = this.options;
+		const metaS3: S3CacheSuccessSaveEventMetadata = {
+			persistenceType: 'redis',
+			key: this.getLogKey(bucketName, s3Key),
+		};
 
 		try {
 			const params = {
@@ -100,6 +136,7 @@ export class S3Cache
 			if (Body) {
 				const result = Buffer.from(await Body.transformToByteArray());
 				if (result.length) {
+					this.emit('fetchingSuccess', 'Cache retrieved', metaS3);
 					this._saveOnRedis(redisKey, result);
 					return result;
 				}
@@ -108,12 +145,13 @@ export class S3Cache
 			return undefined;
 		} catch (err) {
 			const error = err as AWSError;
-			this.emit('fetchingError', 'error while fetching from S3', {
-				persistenceType: 's3',
-				errorMessage: error.message,
-				syscall: error.syscall,
-				code: error.code,
-			});
+			this.emit(
+				'fetchingError',
+				'error while fetching from S3',
+				Object.assign(metaS3, {
+					errorMessage: error.message,
+				}),
+			);
 			return undefined;
 		}
 	}
