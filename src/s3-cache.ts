@@ -104,7 +104,10 @@ export class S3Cache
 		return `${bucketName}/${objectKey}`;
 	}
 
-	async get(key: string): Promise<string | Buffer | undefined> {
+	async get(
+		key: string,
+		firstCheck?: boolean,
+	): Promise<string | Buffer | undefined> {
 		const s3Key = this._getObjectKey(key);
 		const redisKey = this._getRedisKey(s3Key);
 		const metaRedis: S3CacheSuccessSaveEventMetadata = {
@@ -118,14 +121,16 @@ export class S3Cache
 				return redisResult;
 			}
 		} catch (err) {
-			const error = err as AWSError;
-			this.emit(
-				'fetchingError',
-				'error while fetching from redis',
-				Object.assign(metaRedis, {
-					errorMessage: error.message,
-				}),
-			);
+			if (!firstCheck) {
+				const error = err as AWSError;
+				this.emit(
+					'fetchingError',
+					'error while fetching from redis',
+					Object.assign(metaRedis, {
+						errorMessage: error.message,
+					}),
+				);
+			}
 		}
 
 		const { bucketName } = this.options;
@@ -152,14 +157,16 @@ export class S3Cache
 
 			return undefined;
 		} catch (err) {
-			const error = err as AWSError;
-			this.emit(
-				'fetchingError',
-				'error while fetching from S3',
-				Object.assign(metaS3, {
-					errorMessage: error.message,
-				}),
-			);
+			if (!firstCheck) {
+				const error = err as AWSError;
+				this.emit(
+					'fetchingError',
+					'error while fetching from S3',
+					Object.assign(metaS3, {
+						errorMessage: error.message,
+					}),
+				);
+			}
 			return undefined;
 		}
 	}
