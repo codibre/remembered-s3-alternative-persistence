@@ -5,4 +5,5 @@ export interface S3CacheOptions {
 	prefix?: string;
 	transientPrefix?: string;
 	transientTtl: number;
+	shouldUseAlternativePersistence?: (content: unknown, ttl: number) => boolean;
 }
