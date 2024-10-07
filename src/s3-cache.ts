@@ -95,6 +95,13 @@ export class S3Cache
 		});
 	}
 
+	public shouldUseAlternativePersistence(content: unknown, ttl: number) {
+		if (this.options.shouldUseAlternativePersistence) {
+			return this.options.shouldUseAlternativePersistence(content, ttl);
+		}
+		return true;
+	}
+
 	private async _saveOnS3(params: PutObjectCommandInput) {
 		await this.s3.putObject(params);
 		return true;
