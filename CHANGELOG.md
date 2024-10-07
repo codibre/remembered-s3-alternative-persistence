@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.1.3...v1.2.0) (2024-10-07)
+
+
+### Features
+
+* implement shouldUseAlternativePersistence function from AlternativePersistence interface ([7ec3b8d](https://github.com/codibre/remembered-s3-alternative-persistence/commit/7ec3b8d3c503231719ea96e9f56f0fae550d5258))
+
 ## [1.1.3](https://github.com/codibre/remembered-s3-alternative-persistence/compare/v1.1.2...v1.1.3) (2023-06-17)
 
 
